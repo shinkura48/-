@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>スマホ風ガチャゲーム</title>
+<style>
+body{
+  margin:0;
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg,#1e3c72,#2a5298);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:white;
+}
+.container{
+  background: rgba(0,0,0,0.6);
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  width:320px;
+  box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+h1{
+  margin-top:0;
+}
+button{
+  background:gold;
+  border:none;
+  padding:15px 30px;
+  font-size:18px;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.2s;
+}
+button:hover{
+  transform:scale(1.1);
+}
+.result{
+  margin-top:20px;
+  font-size:22px;
+  min-height:60px;
+}
+.card{
+  margin-top:15px;
+  padding:20px;
+  border-radius:15px;
+  font-weight:bold;
+  animation:fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn{
+  from{opacity:0; transform:scale(0.8);}
+  to{opacity:1; transform:scale(1);}
+}
+.common{background:#888;}
+.rare{background:#3fa9f5;}
+.superrare{background:#a64dff;}
+.ultrarare{background:gold; color:black;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎰 ガチャ</h1>
+  <button onclick="drawGacha()">ガチャを引く！</button>
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+const characters = [
+  {name:"スライム", rarity:"common", rate:50},
+  {name:"ナイト", rarity:"rare", rate:30},
+  {name:"ドラゴン", rarity:"superrare", rate:15},
+  {name:"フェニックス", rarity:"ultrarare", rate:5}
+];
+
+function drawGacha(){
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "通信中...";
+  
+  setTimeout(()=>{
+    const rand = Math.random()*100;
+    let sum = 0;
+    let selected;
+
+    for(let char of characters){
+      sum += char.rate;
+      if(rand <= sum){
+        selected = char;
+        break;
+      }
+    }
+
+    resultDiv.innerHTML = `
+      <div class="card ${selected.rarity}">
+        ${getRarityText(selected.rarity)}<br>
+        ${selected.name} 出現！
+      </div>
+    `;
+  },1000);
+}
+
+function getRarityText(rarity){
+  switch(rarity){
+    case "common": return "★";
+    case "rare": return "★★";
+    case "superrare": return "★★★";
+    case "ultrarare": return "★★★★";
+  }
+}
+</script>
+</body>
+</html>
